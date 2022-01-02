@@ -12,10 +12,11 @@ public abstract class Mover {
 
     //comentario
     protected Mover(PVector pos, PVector vel, float mass, float radius){
-        this.pos = pos;
+        this.pos = pos.copy();
         this.vel = vel;
         this.mass = mass;
         this.radius = radius;
+        acc = new PVector();
     }
 
     public void applyForce(PVector force){

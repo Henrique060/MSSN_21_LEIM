@@ -2,7 +2,11 @@ package setup;
 
 import automata.GameofLife;
 import dla.DLA;
+import fractals.ForestApp;
+import fractals.LSystemApp;
 import physics.ControlGUIApp;
+import physics.ParticleSystemApp;
+import physics.SolarSystemApp;
 import processing.core.PApplet;
 import automata.CellularAutomata;
 import automata.Cell;
@@ -44,7 +48,7 @@ public class ProcessingSetup extends PApplet{
     }
 
     public static void main(String[] args) {
-        app = new ControlGUIApp();
+        app = new ForestApp();
         PApplet.main(ProcessingSetup.class);
     }
 }
