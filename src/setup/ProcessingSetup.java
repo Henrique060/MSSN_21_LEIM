@@ -48,7 +48,7 @@ public class ProcessingSetup extends PApplet{
     }
 
     public static void main(String[] args) {
-        app = new ForestApp();
+        app = new SolarSystemApp();
         PApplet.main(ProcessingSetup.class);
     }
 }
