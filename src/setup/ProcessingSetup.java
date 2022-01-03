@@ -1,5 +1,8 @@
 package setup;
 
+import aaa.ComportamentosIndividuaisApp;
+import aaa.FlockTestApp;
+import aaa.ReynoldsTestApp;
 import automata.GameofLife;
 import dla.DLA;
 import fractals.ForestApp;
@@ -48,7 +51,7 @@ public class ProcessingSetup extends PApplet{
     }
 
     public static void main(String[] args) {
-        app = new SolarSystemApp();
+        app = new ComportamentosIndividuaisApp();
         PApplet.main(ProcessingSetup.class);
     }
 }

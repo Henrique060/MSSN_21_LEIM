@@ -68,7 +68,7 @@ public class SolarSystemApp implements IProcessingApp{
 
         PVector vf = sun.attraction(venus);
         venus.applyForce(vf);
-        venus.move(dt*speedUp/2);
+        venus.move(dt*speedUp);
         venus.display(p,plt);
 
         PVector mf = sun.attraction(mercury);
@@ -108,7 +108,7 @@ public class SolarSystemApp implements IProcessingApp{
         int cor = p.color(p.random(255), p.random(255), p.random(255));
         float vx = p.random(distEarthSun,distEarthSun);
         float vy = p.random(distEarthSun,distEarthSun);
-        float lifespan = p.random(1,3);
+        float lifespan = p.random(1,2);
 
         ParticleSystem ps = new ParticleSystem(new PVector((float) ww[0], (float) ww[1]), new PVector(), 1f,distEarthSun/30,
                 cor, lifespan, new PVector(vx,vy));
