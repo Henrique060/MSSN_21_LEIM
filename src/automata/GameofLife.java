@@ -2,22 +2,27 @@ package automata;
 
 import processing.core.PApplet;
 import setup.IProcessingApp;
+import tools.SubPlot;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class GameofLife implements IProcessingApp {
 
-    private int nrows = 120;
-    private int ncols = 160;
-    private int nStates = 2;
-    private int radiusNeigh = 1;
+    private int nrows = 15;
+    private int ncols = 20;
+    private int nStates = 4;
+    private int radiusNeigh = 2;
     private CellularAutomata ca;
     private boolean start;
+    private SubPlot plt;
+    private double[] window = {0, 10, 0, 10};
+    private float[] viewport = {0, 3f, 0.3f, 0.5f, 0.6f};
 
     @Override
     public void setup(PApplet p) {
-        ca = new CellularAutomata(p, nrows, ncols, nStates, radiusNeigh);
+        plt = new SubPlot(window, viewport, p.width, p.height);
+        ca = new CellularAutomata(p, plt, nrows, ncols, nStates, radiusNeigh);
         this.start = false;
         ca.initRandom();
     }
@@ -35,10 +40,14 @@ public class GameofLife implements IProcessingApp {
     @Override
     public void mousePressed(PApplet p) {
         Cell cell = ca.pixel2Cell(p.mouseX, p.mouseY);
-        if (cell.getState() == 1) {
+        /*if (cell.getState() == 1) {
             cell.setState(0);
         } else {
             cell.setState(1);
+        }*/
+        Cell[] neigh = cell.getNeighbors();
+        for(int i = 0; i < neigh.length; i++){
+            neigh[i].setState(nStates-1);
         }
     }
     @Override
@@ -50,6 +59,16 @@ public class GameofLife implements IProcessingApp {
         else{
             System.out.println("IN PROGRESS");
         }
+    }
+
+    @Override
+    public void mouseDragged(PApplet p) {
+
+    }
+
+    @Override
+    public void mouseReleased(PApplet p) {
+
     }
 
 

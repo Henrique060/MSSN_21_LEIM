@@ -1,51 +1,57 @@
 package automata;
 
 import processing.core.PApplet;
+import processing.core.PVector;
+import tools.CustomRandomGenerator;
+import tools.SubPlot;
 
 import java.util.Scanner;
 
 public class CellularAutomata {
-
     //atributos
-    private int nrows;
-    private int ncols;
-    private int nStates;
+    protected int nrows;
+    protected int ncols;
+    protected int nStates;
     private int radiusNeigh;
-    private Cell[][] cells;
+    protected Cell[][] cells;
     private int[] colors;
-    private int cellWidth, cellHeight;
+    protected float cellWidth, cellHeight; //pixels
+    protected float xmin, ymin;
+    private SubPlot plt;
 
-    public CellularAutomata(PApplet p, int nrows, int ncols, int nStates, int radiusNeigh) {
+    public CellularAutomata(PApplet p, SubPlot plt, int nrows, int ncols, int nStates, int radiusNeigh) {
         this.nrows = nrows;
         this.ncols = ncols;
         this.nStates = nStates;
         this.radiusNeigh = radiusNeigh;
         cells = new Cell[nrows][ncols];
         colors = new int[nStates];
-        cellWidth = p.width / ncols;
-        cellHeight = p.height / nrows;
+        float[] bb = plt.getBoundingBox();
+        xmin = bb[0];
+        ymin = bb[1];
+        cellWidth = bb[2] / ncols;
+        cellHeight = bb[3] / nrows;
+        this.plt = plt;
         createCells();
         setStateColors(p);
     }
 
-    public int getCellWidth() {
-        return cellWidth;
+
+    public void setStateColors(PApplet p) {
+        for(int i = 0; i < nStates; i++){
+            colors[i] = p.color(p.random(255), p.random(255), p.random(255));
+        }
     }
 
-    public int getCellHeight() {
-        return cellHeight;
-    }
-
-    private void setStateColors(PApplet p) {
-        colors[0] = p.color(255);
-        colors[1] = p.color(50,50,50);
+    public void setStateColors(int[] colors){
+        this.colors = colors;
     }
 
     public int[] getStateColors() {
         return colors;
     }
 
-    private void createCells() {
+    protected void createCells() {
         for (int i = 0; i < nrows; i++) {
             for (int j = 0; j < ncols; j++) {
                 cells[i][j] = new Cell(this, i, j);
@@ -55,6 +61,11 @@ public class CellularAutomata {
     }
 
     public void initRandom() {
+        /*for(int i = 0; i < nrows; i++){
+            for(int j = 0; j < ncols; j++){
+                cells[i][j].setState((int)(nStates*Math.random()));
+            }
+        }
         Scanner input = new Scanner(System.in);
         System.out.println("Opção 1: Início random");
         System.out.println("Opção 2: Início personalizado");
@@ -67,32 +78,54 @@ public class CellularAutomata {
                 }
             }
         }
-        if(number == 2) {
+        if(number == 2) {*/
             for (int i = 0; i < nrows; i++) {
                 for (int j = 0; j < ncols; j++) {
                     cells[i][j].setState(0);
                 }
             }
+      /*  }
+        System.out.println("Prima qualquer tecla para iniciar");*/
+    }
+
+    public void initRandomCustom(double[] pmf){
+        CustomRandomGenerator crg = new CustomRandomGenerator(pmf);
+        for (int i = 0; i < nrows; i++){
+            for (int j = 0; j < ncols; j++) {
+                cells[i][j].setState(crg.getRandomClass());
+            }
         }
-        System.out.println("Prima qualquer tecla para iniciar");
+    }
+
+    public PVector getCenterCell(int row, int col){
+        float x = (col + 0.5f) * cellWidth;
+        float y = (row + 0.5f) * cellHeight;
+        double[] w = plt.getWorldCoord(x,y);
+        return new PVector((float)w[0], (float)w[1]);
+    }
+
+    public Cell world2Cell(double x, double y){
+        float[] xy = plt.getPixelCoord(x,y);
+        return pixel2Cell(xy[0], xy[1]);
     }
 
     //return da posicao em pixeis de onde estamos a clicar
-    public Cell pixel2Cell(int x, int y) {
-        int row = y / cellHeight;
-        int col = x / cellWidth;
+    public Cell pixel2Cell(float x, float y) {
+        int row = (int)((y - ymin)/ cellHeight);
+        int col = (int)((x - xmin)/ cellWidth);
         if (row >= nrows) {
             row = nrows - 1;
         }
         if (col >= ncols) {
             col = ncols - 1;
         }
-
+        if(row < 0) row = 0;
+        if(col < 0) col = 0;
         return cells[row][col];
     }
 
     //definir a vizinhança segundo o método de Moore
-    private void setMooreNeighbors() {
+    protected void setMooreNeighbors() {
         int NN = (int) Math.pow(2 * radiusNeigh + 1, 2); //Number of Neighbors
         for (int i = 0; i < nrows; i++) {
             for (int j = 0; j < ncols; j++) {
@@ -149,6 +182,14 @@ public class CellularAutomata {
             }
         }
 
+    }
+
+    public float getCellWidth(){
+        return cellWidth;
+    }
+
+    public float getCellHeight(){
+        return cellHeight;
     }
 
     /*public void jogoVida(PApplet p) {

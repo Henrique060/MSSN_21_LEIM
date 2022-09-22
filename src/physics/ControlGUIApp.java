@@ -50,5 +50,15 @@ public class ControlGUIApp implements IProcessingApp{
         mc = new MotionControl(ct,rb);
 
     }
+
+    @Override
+    public void mouseDragged(PApplet p) {
+
+    }
+
+    @Override
+    public void mouseReleased(PApplet p) {
+
+    }
 }
 

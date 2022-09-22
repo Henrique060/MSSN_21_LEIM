@@ -62,4 +62,14 @@ public class ParticleSystemApp implements IProcessingApp {
     public void keyPressed(PApplet p) {
 
     }
+
+    @Override
+    public void mouseDragged(PApplet p) {
+
+    }
+
+    @Override
+    public void mouseReleased(PApplet p) {
+
+    }
 }
